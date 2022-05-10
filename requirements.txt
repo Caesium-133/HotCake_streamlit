@@ -1,0 +1,9 @@
+mysql-connector-python
+streamlit
+konlpy
+textrankr
+krwordrank
+matplotlib
+streamlit_wordcloud
+pandas
+streamlit-aggrid
