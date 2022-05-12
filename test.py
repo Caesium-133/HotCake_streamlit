@@ -1,9 +1,11 @@
-import pandas as pd
 from influxdb import DataFrameClient
-import streamlit as st
+import matplotlib.pyplot as plt
 
 def connectInflux():
-    return DataFrameClient(**st.secrets["influx"])
+    return DataFrameClient(host= "8.142.74.245",
+                            username= "root",
+                            password="123root456",
+                            database="itemExample2")
 
 
 cli = connectInflux()
@@ -13,9 +15,12 @@ def query(SQL):
     result=cli.query(SQL)
     return result
 
-goodsCode="1568805650"
+goodsCode="232558632"
 measurement="gc"+str(goodsCode)
 
 res=query(f"SELECT * FROM {measurement}")
 df=res[measurement]
-print(df.describe())
+
+fig=plt.figure()
+plt.plot(df["price"].astype(float))
+plt.show()

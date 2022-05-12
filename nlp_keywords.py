@@ -6,6 +6,8 @@ import time
 import pandas as pd
 import streamlit as st
 from st_aggrid import AgGrid
+from utils import space
+
 
 
 def fillWithZero(_list,length):
@@ -122,7 +124,8 @@ def getData(keyword):
                 fillWithZero(totalFeedbackCount, supposedLen)
                 fillWithZero(totalPayCount, supposedLen)
 
-                competitivity=totalNum/(np.var(np.array(totalPayCount))*np.mean(np.array(totalPayCount)))
+
+                competitivity=(np.var(np.array(totalPayCount))*totalNum*100)/sum(totalPayCount)
 
                 totalDiscount=[d/100 for d in totalDiscount]
 
@@ -130,8 +133,15 @@ def getData(keyword):
                 df_describe=df.style.format()
                 return df,df_describe,competitivity
 df,df_describe,competitivity=getData(keyword)
-st.write("该商品竞争度为：")
+space(2)
+st.markdown(""
+            "#### 该商品竞争压力为："
+            "")
 st.subheader(competitivity)
+st.latex(""
+         r"竞争压力=\frac{商品总数\times HHI}{\sum 销量} "
+         "")
+space(2)
 visualChoice=st.selectbox("展示简单统计数据还是全部数据？",("统计","全部"))
 if visualChoice=="统计":
     st.dataframe(df.describe())
