@@ -3,6 +3,7 @@ import mysql.connector
 import pandas as pd
 from st_aggrid import AgGrid
 
+st.set_page_config(page_title="热销预测-高级版",page_icon="🥞")
 st.title("热销预测-高级版")
 st.write("在原版的基础上，展示排名增加到了50，且展示分类，允许筛选。")
 

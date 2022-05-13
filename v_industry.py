@@ -5,6 +5,7 @@ from st_aggrid import AgGrid
 from krwordrank.word import KRWordRank, summarize_with_keywords
 from streamlit.components.v1 import html
 
+st.set_page_config(page_title="行业数据",page_icon="🏭")
 st.title("行业数据")
 st.write("选定行业，给出该行业的热门关键词，热销店铺，热销商品，行业集中度等")
 

@@ -2,6 +2,7 @@ import streamlit as st
 import mysql.connector
 import pandas as pd
 
+st.set_page_config(page_title="热销预测-普通版",page_icon="🥞")
 st.title("热销预测")
 st.write("根据原创模型对商品进行评分，得分越高，越有可能再接下来一段时间内热销。")
 st.write("这是普通预测，仅展示第5-10名。")

@@ -3,6 +3,7 @@ import mysql.connector
 import pandas as pd
 from st_aggrid import AgGrid
 
+st.set_page_config(page_title="选品工具",page_icon="🛍")
 st.title("选品工具")
 st.write("根据您指定的属性，提供商品选择和其统计信息")
 
@@ -80,8 +81,6 @@ if needPrice:
         "SELECT min(realprice), max(realprice) FROM itemInfo" + f" WHERE cat_1_code={selectedCat['lcc']} " + mcSQL + scSQL)
     minp = int(prices[0][0])
     maxp = int(prices[0][1])
-    st.write(minp)
-    st.write(maxp)
     priceSpan = st.slider("价格区间：",min_value=minp,max_value=maxp, value=(5000 if minp<5000 else int(minp*1.8), int(maxp * 0.8)),step=100)
     SQL += f" and realprice >= {priceSpan[0]} and realprice <= {priceSpan[1]} "
 if needHonor:

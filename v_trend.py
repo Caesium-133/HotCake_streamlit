@@ -11,6 +11,8 @@ from pylab import mpl
 
 from utils import space
 
+
+st.set_page_config("品类趋势")
 st.title("品类趋势")
 st.write("给出某商品/类别的时间趋势")
 
@@ -122,23 +124,23 @@ if bywhat=="商品":
             plt.legend(goodsCodesList)
             st.pyplot(fig)
 
-            space(2)
-            fig = plt.figure()
-            plt.grid()
-            plt.plot(scoreDF, marker="o")
-            plt.title("评分趋势")
-            plt.xlabel("日期")
-            plt.ylabel("分数")
-            plt.legend(goodsCodesList)
-            st.pyplot(fig)
+            # space(2)
+            # fig = plt.figure()
+            # plt.grid()
+            # plt.plot(scoreDF, marker="o")
+            # plt.title("评分趋势")
+            # plt.xlabel("日期")
+            # plt.ylabel("分数")
+            # plt.legend(goodsCodesList)
+            # st.pyplot(fig)
 
             space(2)
             fig = plt.figure()
             plt.grid()
             plt.plot(couponDF, marker="o")
-            plt.title("折扣趋势")
+            plt.title("优惠券趋势")
             plt.xlabel("日期")
-            plt.ylabel("折扣 (%)")
+            plt.ylabel("优惠券 (%)")
             plt.legend(goodsCodesList)
             st.pyplot(fig)
 

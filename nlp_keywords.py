@@ -15,6 +15,7 @@ def fillWithZero(_list,length):
         while len(_list)!=length:
             _list.append(0)
 
+st.set_page_config("关键词解析","🔑")
 st.title("关键词解析")
 st.write("对输入的关键词分析竞争度，同时给出简单的统计分析")
 
