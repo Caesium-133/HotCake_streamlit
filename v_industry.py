@@ -5,7 +5,7 @@ from st_aggrid import AgGrid
 from krwordrank.word import KRWordRank, summarize_with_keywords
 from streamlit.components.v1 import html
 
-st.set_page_config(page_title="行业数据",page_icon="🏭")
+st.set_page_config(page_title="行业数据", page_icon="🏭")
 st.title("行业数据")
 st.write("选定行业，给出该行业的热门关键词，热销店铺，热销商品，行业集中度等")
 
@@ -57,41 +57,42 @@ with st.sidebar:
             if scTitle != "不选":
                 selectedCat["scc"] = scDict[scTitle]
                 catCode = scDict[scTitle]
-choice=st.selectbox("选择：",["热销商品","热销店铺","热门关键词","行业集中度"])
+choice = st.selectbox("选择：", ["热销商品", "热销店铺", "热门关键词", "行业集中度"])
 
-if choice=="热销商品":
-    num=st.slider("请选择显示数量：",1,50,20,1)
-    res=query(f"SELECT goodsCode FROM bestsellersofeachcat WHERE parentLC = {selectedCat['lcc']} limit {num}")
-    gclist=[re[0] for re in res]
-    df = pd.DataFrame(columns=["排名","商品编号","商品名","现价","原价","店铺名"])
+if choice == "热销商品":
+    num = st.slider("请选择显示数量：", 1, 50, 20, 1)
+    res = query(f"SELECT goodsCode FROM bestsellersofeachcat WHERE parentLC = {selectedCat['lcc']} limit {num}")
+    gclist = [re[0] for re in res]
+    df = pd.DataFrame(columns=["排名", "商品编号", "商品名", "现价", "原价", "店铺名"])
     for gc in gclist:
-        infos=query(f"SELECT title,realPrice,originalPrice,shopTitle FROM itemInfo WHERE goodsCode={gc}")
-        infolist= [len(df.index)+1,gc]
+        infos = query(f"SELECT title,realPrice,originalPrice,shopTitle FROM itemInfo WHERE goodsCode={gc}")
+        infolist = [len(df.index) + 1, gc]
         infolist.extend(list(infos[0]))
         df.loc[len(df.index)] = infolist
-    AgGrid(df,theme="material")
-elif choice=="热销店铺":
+    AgGrid(df, theme="material")
+elif choice == "热销店铺":
     num = st.slider("请选择显示数量：", 1, 50, 20, 1)
-    mcSQL=f" AND cat_2_code={selectedCat['mcc']}" if selectedCat['mcc'] else ""
-    scSQL=f" AND cat_3_code={selectedCat['scc']}" if selectedCat['scc'] else ""
-    res=query(f"SELECT shopTitle FROM itemInfo WHERE cat_1_code={selectedCat['lcc']} "+mcSQL+scSQL+f" limit {num}")
-    if len(res)<1:
+    mcSQL = f" AND cat_2_code={selectedCat['mcc']}" if selectedCat['mcc'] else ""
+    scSQL = f" AND cat_3_code={selectedCat['scc']}" if selectedCat['scc'] else ""
+    res = query(
+        f"SELECT shopTitle FROM itemInfo WHERE cat_1_code={selectedCat['lcc']} " + mcSQL + scSQL + f" limit {num}")
+    if len(res) < 1:
         st.warning("该行业下店铺较少，再等等吧。")
     df = pd.DataFrame(columns=["排名", "店铺名"])
     for re in res:
         if re[0] is None:
             continue
         else:
-            df.loc[len(df.index)] = [len(df.index)+1,re[0]]
-    AgGrid(df,theme="material")
-elif choice=="热门关键词":
+            df.loc[len(df.index)] = [len(df.index) + 1, re[0]]
+    AgGrid(df, theme="material")
+elif choice == "热门关键词":
     mcSQL = f" AND cat_2_code={selectedCat['mcc']}" if selectedCat['mcc'] else ""
     scSQL = f" AND cat_3_code={selectedCat['scc']}" if selectedCat['scc'] else ""
     res = query(
         f"SELECT title FROM itemInfo WHERE cat_1_code={selectedCat['lcc']} " + mcSQL + scSQL)
     if len(res) < 1:
         st.warning("该行业下商品较少，再等等吧。")
-    titleList=[]
+    titleList = []
     for re in res:
         if re[0] is None:
             continue
@@ -124,7 +125,7 @@ elif choice=="热门关键词":
         df = pd.DataFrame(keywordslist)
         df.columns = ["关键词", "权重"]
         st.table(df)
-if choice=="行业集中度":
+if choice == "行业集中度":
     st.write("使用赫芬达尔—赫希曼指数(HHI)")
     st.latex(r"HHI=\sum_i^n {s_i^2}\times \alpha")
     st.latex(r"其中s_i为第i家店铺的市场占有率. \alpha = 10000, 为便于观察所设置")
@@ -133,19 +134,18 @@ if choice=="行业集中度":
     scSQL = f" AND cat_3_code={selectedCat['scc']}" if selectedCat['scc'] else ""
     gcNum = query(
         f"SELECT COUNT(*) FROM itemInfo WHERE cat_1_code={selectedCat['lcc']} ")
-    gcNum=int(gcNum[0][0])
-    shopInfos=query(
+    gcNum = int(gcNum[0][0])
+    shopInfos = query(
         f"SELECT shopTitle, COUNT(*) FROM itemInfo WHERE cat_1_code={selectedCat['lcc']} group by shopTitle")
-    hhi=0
+    hhi = 0
     for si in shopInfos:
-        s=float(si[1]/gcNum)**2
-        hhi+=s
+        s = float(si[1] / gcNum) ** 2
+        hhi += s
     st.markdown(f"#### 该行业HHI=")
     html(
         f'''
         <body>
-    	<h2 align="center">{hhi*10000}</h2>
+    	<h2 align="center">{hhi * 10000}</h2>
         </body>
         '''
     )
-
