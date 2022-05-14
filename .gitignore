@@ -2,4 +2,6 @@
 /test.html
 /test.py
 /.streamlit/
+/.idea/
+/__pycache__/
 
